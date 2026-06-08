@@ -1,0 +1,4 @@
+id,name,email,role
+1,Ari Customer,ari@example.com,customer
+2,Mina Customer,mina@example.com,customer
+3,Admin User,admin@example.com,admin

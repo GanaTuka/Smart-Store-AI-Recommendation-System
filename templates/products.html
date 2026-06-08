@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Products | Smart Store AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav"><strong>Products</strong><a href="/">Dashboard</a><a href="/recommendations">Recommendations</a></nav>
+    <main class="page">
+        <h1>Product List</h1>
+        <div id="products" class="card-grid"></div>
+    </main>
+    <script>
+        fetch('/products').then(r => r.json()).then(products => {
+            document.getElementById('products').innerHTML = products.map(product => `
+                <article class="card">
+                    <h3>${product.name}</h3>
+                    <p>${product.category}</p>
+                    <strong>$${Number(product.price).toFixed(2)}</strong>
+                </article>
+            `).join('');
+        });
+    </script>
+</body>
+</html>
