@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recommendations | Smart Store AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav"><strong>AI Recommendations</strong><a href="/">Dashboard</a><a href="/product-list">Products</a></nav>
+    <main class="page split">
+        <section>
+            <p class="eyebrow">Live Demo</p>
+            <h1>Get product recommendations</h1>
+            <p>Enter a user ID and let the AI module suggest products from order history.</p>
+            <div class="action-row">
+                <input id="userId" type="number" value="1" min="1">
+                <button id="recommendBtn">Get Recommendations</button>
+            </div>
+        </section>
+        <section id="recommendations" class="card-grid"></section>
+    </main>
+    <script src="{{ url_for('static', filename='js/recommendation.js') }}"></script>
+</body>
+</html>

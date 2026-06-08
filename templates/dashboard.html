@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | Smart Store AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <strong>Smart Store AI</strong>
+        <a href="/product-list">Products</a>
+        <a href="/recommendations">Recommendations</a>
+        <a href="/admin">Admin</a>
+    </nav>
+    <main class="hero">
+        <section>
+            <p class="eyebrow">AI Recommendation System</p>
+            <h1>Turn store data into useful product suggestions.</h1>
+            <p>Simple Flask + MySQL + AI module structure built for a fast hackathon demo.</p>
+            <a class="button" href="/recommendations">Get Recommendations</a>
+        </section>
+        <section class="stats-grid">
+            <article><span>01</span><strong>Products API</strong><p>GET /products</p></article>
+            <article><span>02</span><strong>AI API</strong><p>GET /recommendations/&lt;user_id&gt;</p></article>
+            <article><span>03</span><strong>Analytics API</strong><p>GET /analytics/top-products</p></article>
+        </section>
+    </main>
+</body>
+</html>
