@@ -14,17 +14,25 @@ async function loadRecommendations() {
         return;
     }
 
-    output.innerHTML = products.map(product => `
-        <article class="card">
-            <p class="eyebrow">${product.category}</p>
-            <h3>${product.product_id.slice(0, 12)}...</h3>
-            <p>Recommended for customer ${customerId.slice(0, 10)}...</p>
-            <p>AI similarity score: ${product.score}</p>
-            <p>Store popularity: ${product.popularity} sales</p>
-            <p>${product.explanation}</p>
-            <strong>$${Number(product.avg_price || 0).toFixed(2)} avg</strong>
-        </article>
-    `).join('') || '<p>No recommendations found.</p>';
+    output.innerHTML = products.map(product => {
+        const isFallback = product.model === 'popular_fallback';
+        const scoreLine = isFallback
+            ? 'Recommendation mode: popular fallback'
+            : `AI similarity score: ${product.score}`;
+
+        return `
+            <article class="card">
+                <p class="eyebrow">${product.category}</p>
+                <h3>${product.product_id.slice(0, 12)}...</h3>
+                <p>Recommended for customer ${customerId.slice(0, 10)}...</p>
+                <p>${scoreLine}</p>
+                <p>Explanation: ${product.explanation_source || 'template_fallback'}</p>
+                <p>Store popularity: ${product.popularity} sales</p>
+                <p>${product.explanation}</p>
+                <strong>$${Number(product.avg_price || 0).toFixed(2)} avg</strong>
+            </article>
+        `;
+    }).join('') || '<p>No recommendations found.</p>';
 }
 
 button.addEventListener('click', loadRecommendations);
