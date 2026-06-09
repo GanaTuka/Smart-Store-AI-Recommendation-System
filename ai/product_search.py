@@ -13,27 +13,31 @@ def search_products_with_ai(query, customer_id=DEFAULT_CUSTOMER_ID, limit=9):
     terms = extract_terms(query)
     customer_categories = get_customer_categories(customer_id)
     products = search_products(terms, max_price, limit)
+    match_type = "exact_search"
 
     if not products and customer_categories:
         products = search_products(customer_categories[:2], max_price, limit)
+        match_type = "customer_history"
 
     if not products:
         products = get_popular_products(limit)
+        match_type = "popular_fallback"
 
-    answer = explain_search(query, products, customer_categories, max_price)
+    answer = explain_search(query, products, customer_categories, max_price, terms, match_type)
     return {
         "query": query,
         "customer_id": customer_id,
         "max_price": max_price,
         "customer_categories": customer_categories,
+        "match_type": match_type,
         "answer": answer,
         "products": products,
     }
 
 
 def extract_budget(query):
-    match = re.search(r"(?:\$\s*)?(\d+(?:\.\d+)?)\s*(?:\$|usd|dollars)?", query.lower())
-    return float(match.group(1)) if match else None
+    matches = re.findall(r"(?:\$\s*)?(\d+(?:\.\d+)?)\s*(?:\$|usd|dollars)?", query.lower())
+    return max(float(match) for match in matches) if matches else None
 
 
 def extract_terms(query):
@@ -124,24 +128,54 @@ def get_popular_products(limit):
     return search_products([], None, limit)
 
 
-def explain_search(query, products, customer_categories, max_price):
+def explain_search(query, products, customer_categories, max_price, terms, match_type):
     top = products[0]
-    category_history = ", ".join(customer_categories[:3]) or "no previous category history"
+    category_history = ", ".join(format_category(category) for category in customer_categories[:3])
     budget_text = f" under ${max_price:.2f}" if max_price is not None else ""
-    base = (
-        f"Based on the database, the best match for '{query or 'popular products'}' is a "
-        f"{top['category']} product{budget_text}. It averages ${float(top['avg_price']):.2f}, "
-        f"has {top['popularity']} sales, and customer history includes {category_history}."
-    )
+    category = format_category(top["category"])
+
+    if match_type == "customer_history":
+        base = (
+            f"I could not find strong matches for '{query}', so I used your previous shopping history. "
+            f"You have bought from {category_history}, so I recommend popular {category} products{budget_text}."
+        )
+    elif match_type == "popular_fallback":
+        base = (
+            f"I could not find enough products that match '{query}', so there is not much to show for that demand. "
+            f"Here are popular store picks instead."
+        )
+    elif has_history_overlap(terms, customer_categories):
+        base = (
+            f"You have bought similar items before in {category_history}, so I recommend {category} products{budget_text}. "
+            f"The top pick averages ${float(top['avg_price']):.2f} and has {top['popularity']} sales."
+        )
+    else:
+        base = (
+            f"For '{query or 'your search'}', I found {category} products{budget_text}. "
+            f"The top pick averages ${float(top['avg_price']):.2f} and has {top['popularity']} sales, making it a strong store pick."
+        )
+
     prompt = f"""
-Rewrite this database-grounded shopping answer in one friendly sentence under 35 words.
-Do not invent product names, brands, materials, colors, or features.
-Keep the category, price, sales count, or customer-history reason.
-Do not say price ranges unless the base answer says a range.
+Rewrite this shopping answer in a friendly website tone.
+Return only the final sentence.
+Do not include options, markdown, quotes, or commentary.
+Do not invent product names, brands, materials, colors, features, or price ranges.
+Keep the same meaning and keep it under 45 words.
 Base answer: {base}
 """.strip()
     llm_answer = call_ollama(prompt)
     return llm_answer if llm_answer and is_safe_search_answer(llm_answer) else base
+
+
+def format_category(category):
+    return category.replace("_", " ")
+
+
+def has_history_overlap(terms, customer_categories):
+    if not terms:
+        return False
+    normalized_history = " ".join(customer_categories).lower().replace("_", " ")
+    return any(term.replace("_", " ") in normalized_history for term in terms)
 
 
 def is_safe_search_answer(answer):
@@ -161,5 +195,21 @@ def is_safe_search_answer(answer):
         "featuring",
         "$500+",
         "+ furniture",
+        "okay",
+        "option",
+        "**",
+        "here are",
+        "here’s",
+        "here's",
+        "\n",
+        "stylish",
+        "home décor",
+        "home decor",
+        "price range",
+        "buyers",
+        "satisfied",
+        "enjoyed",
+        "boasts",
+        "boasting",
     ]
     return not any(phrase in text for phrase in unsafe_phrases)

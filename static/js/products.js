@@ -22,10 +22,10 @@ function renderProducts(products, aiMode = false) {
             <article class="store-card catalog-card">
                 <div class="store-card-media">${displayCategory(product.category).slice(0, 2)}</div>
                 <div class="store-card-body">
-                    <span class="model-badge">${aiMode ? 'AI database match' : `${sales} sales`}</span>
+                    <span class="model-badge">${aiMode ? 'Suggested for you' : `${sales} bought`}</span>
                     <h3>${displayCategory(product.category)} Pick</h3>
-                    <p class="product-id">Product ID: ${shortId(product.product_id)}</p>
-                    <p>${aiMode ? 'Selected from your AI search using Olist sales data.' : 'Popular item from real Olist purchase data.'}</p>
+                    <p class="product-id">Catalog ref: ${shortId(product.product_id)}</p>
+                    <p>${aiMode ? 'Chosen from your shopping request and customer profile.' : 'A frequently purchased item from this category.'}</p>
                     <div class="store-card-footer">
                         <strong>$${Number(product.avg_price || 0).toFixed(2)}</strong>
                         <small>${sales} sales</small>
@@ -54,20 +54,20 @@ async function loadProducts() {
 
 async function runAiSearch(query) {
     if (!query) {
-        showAiAnswer('loading-status', 'AI shopping assistant ready', 'Type a product idea, category, or budget to search the database.');
+        showAiAnswer('loading-status', 'Shopping assistant ready', 'Ask for a category, budget, or shopping idea and we will suggest the best available matches.');
         renderProducts(allProducts);
         return;
     }
 
-    showAiAnswer('loading-status', 'AI is searching the catalog', 'Reading MySQL product data and generating a grounded shopping answer.');
+    showAiAnswer('loading-status', 'Finding the best matches', 'Checking your profile, product prices, and popularity before answering.');
 
     try {
         const response = await fetch(`/products/search-ai?q=${encodeURIComponent(query)}&customer_id=${demoCustomerId}`);
         const result = await response.json();
-        showAiAnswer('success-status', 'AI shopping answer', result.answer);
+        showAiAnswer('success-status', 'Shopping assistant', result.answer);
         renderProducts(result.products, true);
     } catch (error) {
-        showAiAnswer('error-status', 'AI search unavailable', 'Check MySQL, Flask logs, and the local Ollama server.');
+        showAiAnswer('error-status', 'Search unavailable', 'Please try again in a moment.');
     }
 }
 

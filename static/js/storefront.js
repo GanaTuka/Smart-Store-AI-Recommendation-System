@@ -54,7 +54,7 @@ async function loadHomeRecommendations() {
     if (!customerId) return;
 
     homeStatus.className = 'ai-status loading-status';
-    homeStatus.innerHTML = '<strong>AI is working</strong><span>Building customer profile and ranking products.</span>';
+        homeStatus.innerHTML = '<strong>Finding picks for you</strong><span>Checking your shopping profile and current product popularity.</span>';
     homeRecommendations.innerHTML = '<div class="loading-card">Loading AI picks...</div>';
 
     try {
@@ -63,12 +63,12 @@ async function loadHomeRecommendations() {
         const fallback = products.every(product => product.model === 'popular_fallback');
         homeStatus.className = fallback ? 'ai-status fallback-status' : 'ai-status success-status';
         homeStatus.innerHTML = fallback
-            ? '<strong>Popular fallback active</strong><span>The logged-in demo customer has limited matching history, so popular products are shown.</span>'
-            : '<strong>AI recommendations active</strong><span>Products are ranked from the logged-in demo customer\'s purchase behavior.</span>';
+            ? '<strong>Popular products selected</strong><span>Your profile has limited matching history, so these are strong store-wide picks.</span>'
+            : '<strong>Personal picks ready</strong><span>These products are ranked from your shopping behavior.</span>';
         renderStoreCards(homeRecommendations, products, 'ai');
     } catch (error) {
         homeStatus.className = 'ai-status error-status';
-        homeStatus.innerHTML = '<strong>AI unavailable</strong><span>Check MySQL and Flask logs.</span>';
+        homeStatus.innerHTML = '<strong>Recommendations unavailable</strong><span>Please try again in a moment.</span>';
         homeRecommendations.innerHTML = '';
     }
 }

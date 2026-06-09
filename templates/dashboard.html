@@ -18,32 +18,32 @@
     <main class="storefront">
         <section class="store-hero">
             <div>
-                <p class="eyebrow">AI Powered E-commerce Demo</p>
+                <p class="eyebrow">Welcome</p>
                 <h1>Shop smarter with personalized product picks.</h1>
-                <p>You are browsing as a logged-in demo customer. The local AI engine automatically recommends products from purchase behavior and Olist sales patterns.</p>
+                <p>Discover popular categories, compare prices, and get product suggestions shaped by your shopping profile.</p>
                 <div class="hero-actions">
                     <a class="button" href="/product-list">Explore Products</a>
-                    <a class="ghost-button" href="/recommendations">Try AI Picks</a>
+                    <a class="ghost-button" href="/recommendations">View For You</a>
                 </div>
             </div>
             <aside class="hero-card">
-                <span>Live data</span>
+                <span>Smart catalog</span>
                 <strong>99k+</strong>
-                <p>Orders analyzed from the Olist dataset using Flask, MySQL, ML similarity, and Ollama explanations.</p>
+                <p>Orders analyzed to surface products people actually buy and categories worth exploring.</p>
             </aside>
         </section>
 
         <section class="home-ai-strip">
             <div class="section-heading">
-                <p class="eyebrow">Personalized Preview</p>
-                <h2>AI picks appear before customers start browsing.</h2>
-                <p>Recommendations are generated automatically for the logged-in demo customer. You can also test another customer ID.</p>
+                <p class="eyebrow">For You</p>
+                <h2>Recommended before you start browsing</h2>
+                <p>A quick preview of products selected from your shopping profile. Open the full For You page for detailed explanations.</p>
             </div>
             <div class="home-ai-controls">
                 <input id="homeCustomerId" type="text" value="06b8999e2fba1a1fbc88172c00ba8bc7">
-                <button id="homeRecommendBtn">Generate Picks</button>
+                <button id="homeRecommendBtn">Refresh</button>
             </div>
-            <div id="homeAiStatus" class="ai-status loading-status">Ready to generate AI picks.</div>
+            <div id="homeAiStatus" class="ai-status loading-status">Preparing your recommendations.</div>
             <div id="homeRecommendations" class="store-product-grid"></div>
         </section>
 
