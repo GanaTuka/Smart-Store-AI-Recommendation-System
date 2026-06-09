@@ -12,11 +12,14 @@
         <section class="catalog-hero">
             <p class="eyebrow">Product Catalog</p>
             <h1>Browse popular products from real commerce data.</h1>
-            <p>Products are grouped by Olist category, ranked by sales volume, and displayed like a modern storefront.</p>
+            <p>Products are grouped by Olist category, ranked by sales volume, and enhanced with AI search answers for the logged-in demo customer.</p>
         </section>
         <section class="catalog-toolbar">
-            <input id="productSearch" type="search" placeholder="Search categories like furniture, beauty, electronics...">
+            <input id="productSearch" type="search" placeholder="Try: furniture, garden tools, 500$ worth of furniture...">
             <span id="productCount">Loading products...</span>
+        </section>
+        <section id="aiSearchAnswer" class="ai-status loading-status">
+            <strong>AI shopping assistant ready</strong><span>Type a product idea, category, or budget to search the database.</span>
         </section>
         <section id="products" class="store-product-grid"></section>
     </main>

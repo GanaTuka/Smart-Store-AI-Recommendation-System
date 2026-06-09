@@ -63,8 +63,8 @@ async function loadHomeRecommendations() {
         const fallback = products.every(product => product.model === 'popular_fallback');
         homeStatus.className = fallback ? 'ai-status fallback-status' : 'ai-status success-status';
         homeStatus.innerHTML = fallback
-            ? '<strong>Popular fallback active</strong><span>This customer has limited matching history, so popular products are shown.</span>'
-            : '<strong>AI recommendations active</strong><span>Products are ranked from this customer\'s purchase behavior.</span>';
+            ? '<strong>Popular fallback active</strong><span>The logged-in demo customer has limited matching history, so popular products are shown.</span>'
+            : '<strong>AI recommendations active</strong><span>Products are ranked from the logged-in demo customer\'s purchase behavior.</span>';
         renderStoreCards(homeRecommendations, products, 'ai');
     } catch (error) {
         homeStatus.className = 'ai-status error-status';
