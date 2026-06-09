@@ -26,7 +26,10 @@ Example fields:
   "product_id": "...",
   "category": "health_beauty",
   "avg_price": "39.90",
-  "score": 20
+  "score": 0.91,
+  "popularity": 120,
+  "model": "ml_similarity",
+  "explanation": "This product matches the customer's purchase profile..."
 }
 ```
 

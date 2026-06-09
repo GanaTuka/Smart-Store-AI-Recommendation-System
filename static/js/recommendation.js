@@ -19,7 +19,9 @@ async function loadRecommendations() {
             <p class="eyebrow">${product.category}</p>
             <h3>${product.product_id.slice(0, 12)}...</h3>
             <p>Recommended for customer ${customerId.slice(0, 10)}...</p>
-            <p>Popularity score: ${product.score}</p>
+            <p>AI similarity score: ${product.score}</p>
+            <p>Store popularity: ${product.popularity} sales</p>
+            <p>${product.explanation}</p>
             <strong>$${Number(product.avg_price || 0).toFixed(2)} avg</strong>
         </article>
     `).join('') || '<p>No recommendations found.</p>';

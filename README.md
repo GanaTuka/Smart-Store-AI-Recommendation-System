@@ -1,6 +1,6 @@
 # Smart-Store-AI-Recommendation-System
 
-Hackathon-ready smart store recommendation system using one Flask app, one MySQL database, and one AI recommendation module.
+Hackathon-ready smart store recommendation system using one Flask app, one MySQL database, and one local open-source AI recommendation module.
 
 ## Core API Contract
 
@@ -60,4 +60,4 @@ Use a real `customer_id` from `dataset/olist_customers_dataset.csv` on the recom
 
 ## Recommendation Logic
 
-The first version recommends popular Olist products from categories the customer already bought from. If a customer has no order history, it falls back to top-selling products.
+The recommendation module uses a local `scikit-learn` content-based model. It builds product vectors from category text, average price, popularity, and product dimensions, then ranks products by cosine similarity to the customer's purchase history. No external API key is required.
