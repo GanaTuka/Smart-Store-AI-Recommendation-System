@@ -4,8 +4,8 @@
     --panel: #fffdf7;
     --accent: #e85d3f;
     --accent-2: #3f8f5f;
-    --text: #2a2118;
-    --muted: #7b6f60;
+    --text: #17110c;
+    --muted: #4f4338;
     --warning: #d99a25;
     --danger: #c94b4b;
     --line: rgba(79, 55, 32, 0.12);
@@ -97,7 +97,7 @@ a { color: inherit; text-decoration: none; }
 
 .nav-links a {
     border-radius: 999px;
-    color: #6e6256;
+    color: #3f352c;
     font-weight: 700;
     padding: 8px 14px;
 }
@@ -706,6 +706,35 @@ input {
 .kpi-card span { color: var(--muted); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; }
 .kpi-card strong { display: block; font-size: clamp(1.45rem, 3vw, 2.35rem); margin: 8px 0; }
 .kpi-card p { font-size: 0.88rem; margin: 0; }
+
+.admin-ai-panel {
+    background:
+        radial-gradient(circle at top right, rgba(63, 143, 95, 0.18), transparent 34%),
+        linear-gradient(135deg, rgba(255, 253, 247, 0.96), rgba(255, 240, 216, 0.96));
+    border: 1px solid rgba(63, 143, 95, 0.22);
+    border-radius: 28px;
+    box-shadow: 0 24px 80px var(--shadow);
+    display: grid;
+    gap: 12px;
+    margin: 18px 0;
+    padding: 24px;
+}
+
+.admin-ai-panel h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin: 4px 0 0;
+}
+
+.admin-ai-panel p {
+    color: #21170f;
+    font-size: 1.08rem;
+    margin: 0;
+}
+
+.admin-ai-panel small {
+    color: #4f4338;
+    font-weight: 750;
+}
 
 .dashboard-grid {
     display: grid;

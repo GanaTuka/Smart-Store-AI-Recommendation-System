@@ -68,16 +68,19 @@ function renderLeaderboard(id, rows, valueKey, valueLabel) {
 
 async function loadDashboard() {
     try {
-        const [summary, categories, payments, reviews, products, states] = await Promise.all([
+        const [summary, categories, payments, reviews, products, states, business] = await Promise.all([
             fetchJson('/analytics/summary'),
             fetchJson('/analytics/top-categories'),
             fetchJson('/analytics/payment-breakdown'),
             fetchJson('/analytics/review-distribution'),
             fetchJson('/analytics/top-products'),
             fetchJson('/analytics/customer-states'),
+            fetchJson('/analytics/business-recommendation'),
         ]);
 
         renderSummary(summary);
+        document.getElementById('businessRecommendation').textContent = business.recommendation;
+        document.getElementById('businessRecommendationSource').textContent = `Generated from ${business.source} using sales, category, payment, and review analytics.`;
         barChart('categoryChart', categories.map(row => row.category), categories.map(row => Number(row.revenue)), 'Revenue');
         doughnutChart('paymentChart', payments.map(row => row.payment_type), payments.map(row => Number(row.payment_value)));
         doughnutChart('reviewChart', reviews.map(row => `${row.review_score} stars`), reviews.map(row => Number(row.review_count)));

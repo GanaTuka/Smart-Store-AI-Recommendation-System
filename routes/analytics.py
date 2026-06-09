@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, render_template
 
+from analytics.ai_business_insights import get_business_recommendation
 from analytics.category_analysis import get_top_categories
 from analytics.customer_analysis import get_top_customer_states
 from analytics.payment_analysis import get_payment_breakdown
@@ -45,3 +46,8 @@ def review_distribution_api():
 @analytics_bp.route("/analytics/customer-states")
 def customer_states_api():
     return jsonify(get_top_customer_states())
+
+
+@analytics_bp.route("/analytics/business-recommendation")
+def business_recommendation_api():
+    return jsonify(get_business_recommendation())

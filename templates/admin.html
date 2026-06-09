@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin | Smart Store AI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=food-helper-2">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=admin-ai-1">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -32,6 +32,15 @@
 
         <section id="summaryCards" class="kpi-grid"></section>
 
+        <section class="admin-ai-panel">
+            <div>
+                <p class="eyebrow">AI Business Recommendation</p>
+                <h2>Further consideration for the store</h2>
+            </div>
+            <p id="businessRecommendation">Analyzing store performance...</p>
+            <small id="businessRecommendationSource">Preparing recommendation source...</small>
+        </section>
+
         <section class="dashboard-grid">
             <article class="dashboard-card large-card">
                 <div class="chart-heading"><h2>Revenue by Category</h2><span>Top categories</span></div>
@@ -55,6 +64,6 @@
             </article>
         </section>
     </main>
-    <script src="{{ url_for('static', filename='js/admin-dashboard.js') }}?v=helper-2"></script>
+    <script src="{{ url_for('static', filename='js/admin-dashboard.js') }}?v=admin-ai-1"></script>
 </body>
 </html>
