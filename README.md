@@ -44,6 +44,37 @@ python app.py
 
 Open `http://127.0.0.1:5000`.
 
+## Database Setup Checklist
+
+After pulling the latest code, every teammate must create their own local `.env` and local MySQL database. The database data is not stored in GitHub.
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` for that machine's MySQL account:
+
+```env
+MYSQL_HOST=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=smart_store
+```
+
+Then run:
+
+```bash
+mysql -u root -p < database/schema.sql
+python -m database.import_data
+python -m database.check_connection
+```
+
+If `python app.py` cannot connect to MySQL, run the diagnostic first:
+
+```bash
+python -m database.check_connection
+```
+
 Use a real `customer_id` from `dataset/olist_customers_dataset.csv` on the recommendations page. Example:
 
 ```text
