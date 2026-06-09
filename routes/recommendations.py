@@ -10,6 +10,6 @@ def recommendations_page():
     return render_template("recommendations.html")
 
 
-@recommendations_bp.route("/recommendations/<int:user_id>")
-def recommendations_api(user_id):
-    return jsonify(recommend_products(user_id))
+@recommendations_bp.route("/recommendations/<customer_id>")
+def recommendations_api(customer_id):
+    return jsonify(recommend_products(customer_id))

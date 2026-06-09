@@ -5,7 +5,7 @@ Hackathon-ready smart store recommendation system using one Flask app, one MySQL
 ## Core API Contract
 
 - `GET /products`
-- `GET /recommendations/<user_id>`
+- `GET /recommendations/<customer_id>`
 - `GET /analytics/top-products`
 
 ## Pages
@@ -38,11 +38,17 @@ source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 mysql -u root -p < database/schema.sql
-mysql -u root -p < database/seed_data.sql
+python -m database.import_data
 python app.py
 ```
 
 Open `http://127.0.0.1:5000`.
+
+Use a real `customer_id` from `dataset/olist_customers_dataset.csv` on the recommendations page. Example:
+
+```text
+06b8999e2fba1a1fbc88172c00ba8bc7
+```
 
 ## Team Split
 
@@ -54,4 +60,4 @@ Open `http://127.0.0.1:5000`.
 
 ## Recommendation Logic
 
-The first version recommends highly rated products from categories the user already bought from. If a user has no order history, it falls back to top-rated products.
+The first version recommends popular Olist products from categories the customer already bought from. If a customer has no order history, it falls back to top-selling products.

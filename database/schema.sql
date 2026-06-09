@@ -1,6 +1,15 @@
 CREATE DATABASE IF NOT EXISTS smart_store;
 USE smart_store;
 
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS sellers;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS category_translation;
+
 -- Customers
 CREATE TABLE customers (
     customer_id VARCHAR(50) PRIMARY KEY,

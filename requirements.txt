@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 Flask
 pandas
 SQLAlchemy
 PyMySQL
 python-dotenv
 mysql-connector-python
-=======
-Flask==3.0.3
-mysql-connector-python==9.0.0
-python-dotenv==1.0.1
->>>>>>> 9708887a48e63c3eb385b09d3af6be2e1ad337fb

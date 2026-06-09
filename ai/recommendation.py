@@ -1,43 +1,68 @@
 from database.db import fetch_all
 
 
-def recommend_products(user_id, limit=3):
-    bought_categories = fetch_all(
+def recommend_products(customer_id, limit=3):
+    purchased_categories = fetch_all(
         """
-        SELECT DISTINCT p.category
+        SELECT DISTINCT p.product_category_name
         FROM orders o
-        JOIN products p ON p.id = o.product_id
-        WHERE o.user_id = %s
+        JOIN order_items oi ON oi.order_id = o.order_id
+        JOIN products p ON p.product_id = oi.product_id
+        WHERE o.customer_id = %s
+          AND p.product_category_name IS NOT NULL
         """,
-        (user_id,),
+        (customer_id,),
     )
-    categories = [row["category"] for row in bought_categories]
+    categories = [row["product_category_name"] for row in purchased_categories]
 
     if categories:
         placeholders = ", ".join(["%s"] * len(categories))
-        query = f"""
-            SELECT p.id, p.name, p.category, p.price
+        recommendations = fetch_all(
+            f"""
+            SELECT
+                p.product_id,
+                COALESCE(t.product_category_name_english, p.product_category_name, 'unknown') AS category,
+                ROUND(AVG(oi.price), 2) AS avg_price,
+                COUNT(*) AS score
             FROM products p
-            WHERE p.category IN ({placeholders})
-              AND p.id NOT IN (SELECT product_id FROM orders WHERE user_id = %s)
-            ORDER BY p.rating DESC, p.price ASC
+            JOIN order_items oi ON oi.product_id = p.product_id
+            LEFT JOIN category_translation t
+                ON t.product_category_name = p.product_category_name
+            WHERE p.product_category_name IN ({placeholders})
+              AND p.product_id NOT IN (
+                  SELECT oi2.product_id
+                  FROM orders o2
+                  JOIN order_items oi2 ON oi2.order_id = o2.order_id
+                  WHERE o2.customer_id = %s
+              )
+            GROUP BY p.product_id, category
+            ORDER BY score DESC, avg_price DESC
             LIMIT %s
-        """
-        recommendations = fetch_all(query, (*categories, user_id, limit))
+            """,
+            (*categories, customer_id, limit),
+        )
     else:
         recommendations = []
 
     if len(recommendations) < limit:
         fallback = fetch_all(
             """
-            SELECT id, name, category, price
-            FROM products
-            ORDER BY rating DESC, price ASC
+            SELECT
+                p.product_id,
+                COALESCE(t.product_category_name_english, p.product_category_name, 'unknown') AS category,
+                ROUND(AVG(oi.price), 2) AS avg_price,
+                COUNT(*) AS score
+            FROM products p
+            JOIN order_items oi ON oi.product_id = p.product_id
+            LEFT JOIN category_translation t
+                ON t.product_category_name = p.product_category_name
+            GROUP BY p.product_id, category
+            ORDER BY score DESC, avg_price DESC
             LIMIT %s
             """,
             (limit - len(recommendations),),
         )
-        seen = {item["id"] for item in recommendations}
-        recommendations.extend(item for item in fallback if item["id"] not in seen)
+        seen = {item["product_id"] for item in recommendations}
+        recommendations.extend(item for item in fallback if item["product_id"] not in seen)
 
     return recommendations[:limit]

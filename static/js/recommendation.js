@@ -2,17 +2,25 @@ const button = document.getElementById('recommendBtn');
 const output = document.getElementById('recommendations');
 
 async function loadRecommendations() {
-    const userId = document.getElementById('userId').value || 1;
+    const customerId = document.getElementById('customerId').value.trim();
     output.innerHTML = '<p>Loading recommendations...</p>';
-    const response = await fetch(`/recommendations/${userId}`);
-    const products = await response.json();
+    let products = [];
+
+    try {
+        const response = await fetch(`/recommendations/${customerId}`);
+        products = await response.json();
+    } catch (error) {
+        output.innerHTML = '<p>Could not load recommendations. Check MySQL credentials and imported data.</p>';
+        return;
+    }
 
     output.innerHTML = products.map(product => `
         <article class="card">
             <p class="eyebrow">${product.category}</p>
-            <h3>${product.name}</h3>
-            <p>Strong match for user #${userId}</p>
-            <strong>$${Number(product.price).toFixed(2)}</strong>
+            <h3>${product.product_id.slice(0, 12)}...</h3>
+            <p>Recommended for customer ${customerId.slice(0, 10)}...</p>
+            <p>Popularity score: ${product.score}</p>
+            <strong>$${Number(product.avg_price || 0).toFixed(2)} avg</strong>
         </article>
     `).join('') || '<p>No recommendations found.</p>';
 }
