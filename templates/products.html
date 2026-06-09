@@ -16,11 +16,14 @@
         fetch('/products').then(r => r.json()).then(products => {
             document.getElementById('products').innerHTML = products.map(product => `
                 <article class="card">
-                    <h3>${product.name}</h3>
-                    <p>${product.category}</p>
-                    <strong>$${Number(product.price).toFixed(2)}</strong>
+                    <p class="eyebrow">${product.category}</p>
+                    <h3>${product.product_id.slice(0, 12)}...</h3>
+                    <p>${product.times_sold || 0} sales</p>
+                    <strong>$${Number(product.avg_price || 0).toFixed(2)} avg</strong>
                 </article>
             `).join('');
+        }).catch(() => {
+            document.getElementById('products').innerHTML = '<p>Could not load products. Check MySQL credentials and imported data.</p>';
         });
     </script>
 </body>
