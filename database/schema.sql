@@ -99,7 +99,7 @@ CREATE TABLE payments (
 
 -- Reviews
 CREATE TABLE reviews (
-    review_id VARCHAR(50) PRIMARY KEY,
+    review_id VARCHAR(50),
     order_id VARCHAR(50),
     review_score INT,
     review_comment_title TEXT,
