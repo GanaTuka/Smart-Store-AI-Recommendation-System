@@ -60,4 +60,31 @@ Use a real `customer_id` from `dataset/olist_customers_dataset.csv` on the recom
 
 ## Recommendation Logic
 
-The recommendation module uses a local `scikit-learn` content-based model. It builds product vectors from category text, average price, popularity, and product dimensions, then ranks products by cosine similarity to the customer's purchase history. No external API key is required.
+The recommendation module uses a local `scikit-learn` content-based model. It builds product vectors from category text, average price, popularity, and product dimensions, then ranks products by cosine similarity to the customer's purchase history.
+
+The explanation layer uses Ollama with a local model such as `gemma3:1b` or `llama3.2:3b`. If Ollama is not running, the app automatically falls back to a rule-based explanation, so the demo still works.
+
+## Optional Ollama Setup
+
+Install and run Ollama, then pull a small local model:
+
+```bash
+ollama pull gemma3:1b
+```
+
+Use these `.env` values:
+
+```env
+OLLAMA_ENABLED=true
+OLLAMA_URL=http://localhost:11434/api/generate
+OLLAMA_MODEL=gemma3:1b
+OLLAMA_TIMEOUT=8
+```
+
+Alternative model:
+
+```env
+OLLAMA_MODEL=llama3.2:3b
+```
+
+If Ollama is unavailable, no error is shown to the user; the fallback explanation is used.

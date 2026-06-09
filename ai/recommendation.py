@@ -1,4 +1,4 @@
-from ai.openai_explainer import explain_recommendation
+from ai.ollama_explainer import explain_recommendation
 from ai.similarity import rank_similar_products
 from database.db import fetch_all
 
