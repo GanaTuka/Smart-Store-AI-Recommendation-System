@@ -15,7 +15,7 @@ def explain_recommendation(product, customer_categories):
         product["explanation_source"] = "template_fallback"
         return fallback
 
-    prompt = build_prompt(product, customer_categories)
+    prompt = build_prompt(product, customer_categories, fallback)
     explanation = call_ollama(prompt)
     if explanation and is_safe_explanation(explanation):
         product["explanation_source"] = f"ollama:{os.getenv('OLLAMA_MODEL', 'gemma3:1b')}"
@@ -25,16 +25,16 @@ def explain_recommendation(product, customer_categories):
     return fallback
 
 
-def build_prompt(product, customer_categories):
+def build_prompt(product, customer_categories, base_explanation):
     categories = ", ".join(customer_categories[:5]) or "unknown previous categories"
     mode = "popular fallback" if product.get("model") == "popular_fallback" else "content-based similarity"
     return f"""
 You are an AI assistant for a smart e-commerce store.
-Write exactly one sentence under 30 words.
-Only describe the recommended item as "a product in the {product['category']} category".
+Rewrite the base reason into one friendly sentence under 25 words.
+Do not add any new product details.
 Do not invent product names, item types, brands, materials, smells, colors, features, or benefits.
 Do not use emojis.
-If customer categories are unknown, say it is recommended because it is popular.
+Keep the meaning of the base reason.
 
 Customer purchase categories: {categories}
 Recommended product category: {product['category']}
@@ -42,6 +42,7 @@ Average price: ${product['avg_price']:.2f}
 Store popularity: {product['popularity']} sales
 Recommendation similarity score: {product['score']}
 Recommendation method: {mode}
+Base reason: {base_explanation}
 """.strip()
 
 
@@ -77,7 +78,7 @@ def call_ollama(prompt):
 
 def is_safe_explanation(explanation):
     text = explanation.lower()
-    starts_like_reason = text.startswith("recommended because") or text.startswith("this product is recommended")
+    starts_like_reason = text.startswith("recommended") or text.startswith("this product is recommended")
     invented_detail_words = [
         "chair",
         "desk",
