@@ -4,25 +4,48 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Products | Smart Store AI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=food-helper-2">
 </head>
 <body>
-    <nav class="nav"><strong>Smart Store AI</strong><a href="/">Home</a><a href="/recommendations">AI Picks</a><a href="/admin">Admin</a></nav>
-    <main class="page catalog-page">
+    <nav class="nav site-nav">
+        <a class="brand" href="/">Smart Store AI</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/product-list">Shop</a>
+            <a href="/recommendations">For You</a>
+        </div>
+        <a class="admin-link" href="/admin">Admin</a>
+    </nav>
+    <main class="page catalog-page catalog-with-helper">
         <section class="catalog-hero">
             <p class="eyebrow">Shop</p>
             <h1>Welcome to Smart Store.</h1>
-            <p>Explore popular product categories, compare average prices, and ask the AI shopping assistant for personalized suggestions.</p>
+            <p>Explore popular product categories and compare average prices. Your AI helper is always available on the side when you need shopping advice.</p>
         </section>
-        <section class="catalog-toolbar">
-            <input id="productSearch" type="search" placeholder="Try: furniture, garden tools, 500$ worth of furniture...">
+        <section class="catalog-toolbar compact-toolbar">
             <span id="productCount">Loading products...</span>
+            <span>Popular picks from your store catalog</span>
         </section>
-        <section id="aiSearchAnswer" class="ai-status loading-status">
-            <strong>Shopping assistant ready</strong><span>Ask for a category, budget, or shopping idea and we will suggest the best available matches.</span>
-        </section>
-        <section id="products" class="store-product-grid"></section>
+        <div class="catalog-layout">
+            <section id="products" class="store-product-grid"></section>
+            <aside class="ai-helper-panel">
+                <div class="helper-header">
+                    <span class="helper-avatar">AI</span>
+                    <div>
+                        <p class="eyebrow">Shopping Helper</p>
+                        <h2>Ask what to buy</h2>
+                    </div>
+                </div>
+                <p class="helper-copy">Search with simple words like <button class="helper-chip" data-query="furniture">furniture</button>, <button class="helper-chip" data-query="garden tools">garden tools</button>, or ask naturally like <button class="helper-chip" data-query="100 dollars worth of furniture">100 dollars furniture</button>.</p>
+                <textarea id="productSearch" rows="4" placeholder="Ask me: What furniture should I buy under $100?"></textarea>
+                <button id="askAiBtn">Ask AI Helper</button>
+                <section id="aiSearchAnswer" class="helper-answer">
+                    <strong>Hi, I can help you shop.</strong>
+                    <span>Tell me what you are looking for, and I will explain the best matches in plain language.</span>
+                </section>
+            </aside>
+        </div>
     </main>
-    <script src="{{ url_for('static', filename='js/products.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/products.js') }}?v=helper-2"></script>
 </body>
 </html>

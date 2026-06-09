@@ -136,27 +136,27 @@ def explain_search(query, products, customer_categories, max_price, terms, match
 
     if match_type == "customer_history":
         base = (
-            f"I could not find strong matches for '{query}', so I used your previous shopping history. "
-            f"You have bought from {category_history}, so I recommend popular {category} products{budget_text}."
+            f"I could not find a strong direct match for '{query}', so I looked at your shopping history. "
+            f"Since you previously bought from {category_history}, I would recommend {category} products{budget_text}."
         )
     elif match_type == "popular_fallback":
         base = (
-            f"I could not find enough products that match '{query}', so there is not much to show for that demand. "
-            f"Here are popular store picks instead."
+            f"I could not find enough products that clearly match '{query}'. "
+            f"There is not much to show for that request, so I would start with the most popular store picks instead."
         )
     elif has_history_overlap(terms, customer_categories):
         base = (
-            f"You have bought similar items before in {category_history}, so I recommend {category} products{budget_text}. "
-            f"The top pick averages ${float(top['avg_price']):.2f} and has {top['popularity']} sales."
+            f"You bought similar items before in {category_history}, so I would recommend {category} products{budget_text}. "
+            f"The top pick is affordable at about ${float(top['avg_price']):.2f} and has been bought {top['popularity']} times."
         )
     else:
         base = (
             f"For '{query or 'your search'}', I found {category} products{budget_text}. "
-            f"The top pick averages ${float(top['avg_price']):.2f} and has {top['popularity']} sales, making it a strong store pick."
+            f"You have not bought this category before, so I would choose the top store pick: about ${float(top['avg_price']):.2f} with {top['popularity']} purchases."
         )
 
     prompt = f"""
-Rewrite this shopping answer in a friendly website tone.
+Rewrite this shopping answer like a helpful human store assistant.
 Return only the final sentence.
 Do not include options, markdown, quotes, or commentary.
 Do not invent product names, brands, materials, colors, features, or price ranges.

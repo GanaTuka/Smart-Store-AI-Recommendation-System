@@ -4,15 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Smart Store AI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=food-helper-2">
 </head>
 <body>
-    <nav class="nav storefront-nav">
-        <strong>Smart Store AI</strong>
-        <a href="/">Home</a>
-        <a href="/product-list">Products</a>
-        <a href="/recommendations">AI Picks</a>
-        <a href="/admin">Admin</a>
+    <nav class="nav site-nav">
+        <a class="brand" href="/">Smart Store AI</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/product-list">Shop</a>
+            <a href="/recommendations">For You</a>
+        </div>
+        <a class="admin-link" href="/admin">Admin</a>
     </nav>
 
     <main class="storefront">
@@ -59,6 +61,6 @@
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='js/storefront.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/storefront.js') }}?v=helper-2"></script>
 </body>
 </html>

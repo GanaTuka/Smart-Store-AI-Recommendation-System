@@ -4,11 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin | Smart Store AI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=food-helper-2">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <nav class="nav"><strong>Smart Store Admin</strong><a href="/">Storefront</a><a href="/product-list">Products</a><a href="/recommendations">AI Picks</a></nav>
+    <nav class="nav site-nav admin-nav">
+        <a class="brand" href="/">Smart Store AI</a>
+        <div class="nav-links">
+            <a href="/">Storefront</a>
+            <a href="/product-list">Shop</a>
+            <a href="/recommendations">For You</a>
+        </div>
+        <a class="admin-link active" href="/admin">Admin Dashboard</a>
+    </nav>
     <main class="page admin-page">
         <section class="admin-hero">
             <div>
@@ -47,6 +55,6 @@
             </article>
         </section>
     </main>
-    <script src="{{ url_for('static', filename='js/admin-dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin-dashboard.js') }}?v=helper-2"></script>
 </body>
 </html>

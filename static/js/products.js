@@ -2,9 +2,9 @@ const productGrid = document.getElementById('products');
 const productSearch = document.getElementById('productSearch');
 const productCount = document.getElementById('productCount');
 const aiSearchAnswer = document.getElementById('aiSearchAnswer');
+const askAiBtn = document.getElementById('askAiBtn');
 const demoCustomerId = '06b8999e2fba1a1fbc88172c00ba8bc7';
 let allProducts = [];
-let searchTimer = null;
 
 function displayCategory(category) {
     return category.split('_').filter(Boolean).map(word => word[0].toUpperCase() + word.slice(1)).join(' ');
@@ -49,7 +49,7 @@ function renderProducts(products, aiMode = false) {
 }
 
 function showAiAnswer(type, title, message) {
-    aiSearchAnswer.className = `ai-status ${type}`;
+    aiSearchAnswer.className = `helper-answer ${type}`;
     aiSearchAnswer.innerHTML = `<strong>${title}</strong><span>${message}</span>`;
 }
 
@@ -66,27 +66,39 @@ async function loadProducts() {
 
 async function runAiSearch(query) {
     if (!query) {
-        showAiAnswer('loading-status', 'Shopping assistant ready', 'Ask for a category, budget, or shopping idea and we will suggest the best available matches.');
+        showAiAnswer('loading-status', 'Tell me what you need', 'Ask for a product category, a budget, or a natural shopping question.');
         renderProducts(allProducts);
         return;
     }
 
-    showAiAnswer('loading-status', 'Finding the best matches', 'Checking your profile, product prices, and popularity before answering.');
+    showAiAnswer('loading-status', 'Thinking about your request', 'I am checking matching products, prices, popularity, and your shopping profile.');
 
     try {
         const response = await fetch(`/products/search-ai?q=${encodeURIComponent(query)}&customer_id=${demoCustomerId}`);
         const result = await response.json();
-        showAiAnswer('success-status', 'Shopping assistant', result.answer);
+        showAiAnswer('success-status', 'Here is my honest suggestion', result.answer);
         renderProducts(result.products, true);
     } catch (error) {
-        showAiAnswer('error-status', 'Search unavailable', 'Please try again in a moment.');
+        showAiAnswer('error-status', 'I cannot answer right now', 'Please try again in a moment.');
     }
 }
 
-productSearch.addEventListener('input', () => {
-    clearTimeout(searchTimer);
-    const query = productSearch.value.trim();
-    searchTimer = setTimeout(() => runAiSearch(query), 550);
+askAiBtn.addEventListener('click', () => {
+    runAiSearch(productSearch.value.trim());
+});
+
+productSearch.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        runAiSearch(productSearch.value.trim());
+    }
+});
+
+document.querySelectorAll('.helper-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        productSearch.value = chip.dataset.query;
+        runAiSearch(chip.dataset.query);
+    });
 });
 
 loadProducts();
