@@ -1,7 +1,6 @@
 const button = document.getElementById('recommendBtn');
 const output = document.getElementById('recommendations');
 const statusBox = document.getElementById('aiStatus');
-const demoButton = document.getElementById('demoCustomer');
 const demoCustomerId = '06b8999e2fba1a1fbc88172c00ba8bc7';
 
 function titleFromCategory(category, isFallback) {
@@ -18,22 +17,21 @@ function shortProductId(productId) {
     return `${productId.slice(0, 10)}...${productId.slice(-4)}`;
 }
 
-function setStatus(products, customerId) {
+function setStatus(products) {
     if (!products.length) {
         statusBox.className = 'ai-status error-status';
-        statusBox.innerHTML = '<strong>No recommendations found.</strong><span>Check that the customer ID exists in the Olist dataset.</span>';
+        statusBox.innerHTML = '<strong>No recommendations found</strong><span>We could not find enough shopping history for this profile.</span>';
         return;
     }
 
-    const fallbackCount = products.filter(product => product.model === 'popular_fallback').length;
-    const usesFallback = fallbackCount === products.length;
+    const usesFallback = products.every(product => product.model === 'popular_fallback');
     const explanationSource = products[0].explanation_source || 'template_fallback';
 
     if (usesFallback) {
         statusBox.className = 'ai-status fallback-status';
         statusBox.innerHTML = `
-            <strong>Popular fallback active</strong>
-            <span>Customer ${customerId.slice(0, 10)}... has no usable purchase-history match in the AI catalog, so we are showing strong store-wide picks.</span>
+            <strong>Popular picks selected</strong>
+            <span>Your profile has limited matching history, so these recommendations are based on store-wide performance.</span>
             <small>Explanation source: ${explanationSource}</small>
         `;
         return;
@@ -41,24 +39,26 @@ function setStatus(products, customerId) {
 
     statusBox.className = 'ai-status success-status';
     statusBox.innerHTML = `
-        <strong>AI recommendation engine active</strong>
-        <span>Products are ranked from this customer's purchase history using content-based ML similarity.</span>
+        <strong>Personalized recommendations active</strong>
+        <span>These products are ranked from your purchase behavior using content-based AI similarity.</span>
         <small>Explanation source: ${explanationSource}</small>
     `;
 }
 
-async function loadRecommendations() {
-    const customerId = document.getElementById('customerId').value.trim();
-    output.innerHTML = '<div class="loading-card">Building customer profile and ranking products...</div>';
+function renderLoading() {
+    output.innerHTML = `
+        <div class="loading-card">Building your shopping profile...</div>
+        <div class="loading-card">Ranking products from purchase history...</div>
+        <div class="loading-card">Preparing recommendation reasons...</div>
+    `;
     statusBox.className = 'ai-status loading-status';
-    statusBox.innerHTML = '<strong>AI is working</strong><span>Reading MySQL purchase history, ranking products, and preparing explanations.</span>';
+    statusBox.innerHTML = '<strong>AI is working</strong><span>Reading your purchase history and ranking products from live store data.</span>';
+}
 
-    if (!customerId) {
-        statusBox.className = 'ai-status error-status';
-        statusBox.innerHTML = '<strong>Customer ID required</strong><span>Paste an Olist customer ID to generate recommendations.</span>';
-        output.innerHTML = '';
-        return;
-    }
+async function loadRecommendations() {
+    const customerInput = document.getElementById('customerId');
+    const customerId = customerInput.value.trim() || demoCustomerId;
+    renderLoading();
 
     let products = [];
 
@@ -68,21 +68,21 @@ async function loadRecommendations() {
         products = await response.json();
     } catch (error) {
         statusBox.className = 'ai-status error-status';
-        statusBox.innerHTML = '<strong>Recommendation engine unavailable</strong><span>Check MySQL, imported data, and the Flask server logs.</span>';
+        statusBox.innerHTML = '<strong>Recommendations unavailable</strong><span>Please check MySQL, imported data, and the Flask server logs.</span>';
         output.innerHTML = '';
         return;
     }
 
-    setStatus(products, customerId);
+    setStatus(products);
 
     output.innerHTML = products.map((product, index) => {
         const isFallback = product.model === 'popular_fallback';
         const title = titleFromCategory(product.category, isFallback);
         const scorePercent = Math.round(Number(product.score || 0) * 100);
-        const badge = isFallback ? 'Popular fallback' : `${scorePercent}% AI match`;
+        const badge = isFallback ? 'Popular pick' : `${scorePercent}% AI match`;
         const modelText = isFallback
-            ? 'Selected from popular store-wide products'
-            : 'Matched from customer purchase behavior';
+            ? 'Selected from high-performing store products'
+            : 'Matched from your purchase behavior';
 
         return `
             <article class="recommendation-card ${isFallback ? 'fallback-card' : ''}">
@@ -92,7 +92,7 @@ async function loadRecommendations() {
                 </div>
                 <p class="eyebrow">${product.category.replaceAll('_', ' ')}</p>
                 <h3>${title}</h3>
-                <p class="product-id">Product ID: ${shortProductId(product.product_id)}</p>
+                <p class="product-id">Catalog reference: ${shortProductId(product.product_id)}</p>
                 <div class="metric-row">
                     <div><span>${product.popularity}</span><small>sales</small></div>
                     <div><span>$${Number(product.avg_price || 0).toFixed(2)}</span><small>avg price</small></div>
@@ -106,11 +106,6 @@ async function loadRecommendations() {
         `;
     }).join('') || '<p>No recommendations found.</p>';
 }
-
-demoButton.addEventListener('click', () => {
-    document.getElementById('customerId').value = demoCustomerId;
-    loadRecommendations();
-});
 
 button.addEventListener('click', loadRecommendations);
 loadRecommendations();

@@ -8,24 +8,32 @@
 </head>
 <body>
     <nav class="nav"><strong>Smart Store AI</strong><a href="/">Home</a><a href="/product-list">Products</a><a href="/admin">Admin</a></nav>
-    <main class="page customer-page">
-        <section class="customer-hero">
+    <main class="page customer-page shop-rec-page">
+        <section class="customer-hero shop-rec-hero">
             <div>
-                <p class="eyebrow">Customer Recommendations</p>
-                <h1>Your personalized picks powered by local AI.</h1>
-                <p>You are logged in as a demo customer. The system reads purchase history from MySQL, ranks products with a content-based ML model, then explains the result with Ollama or a safe fallback.</p>
+                <p class="eyebrow">For You</p>
+                <h1>Recommended products picked for your shopping style.</h1>
+                <p>Smart Store AI studies your purchase history, compares product categories, prices, and popularity, then explains why each product is worth considering.</p>
             </div>
-            <div class="customer-panel">
-                <label for="customerId">Logged-in demo customer</label>
-                <div class="action-row compact-action">
-                    <input id="customerId" type="text" value="06b8999e2fba1a1fbc88172c00ba8bc7">
-                    <button id="recommendBtn">Find Picks</button>
+            <div class="customer-panel profile-panel">
+                <div class="profile-avatar">AI</div>
+                <div>
+                    <p class="eyebrow">Signed-in customer</p>
+                    <h2>Personal shopping profile</h2>
+                    <p>Your recommendations refresh automatically from live Olist order data.</p>
                 </div>
-                <p class="hint">Default customer is loaded automatically. Use the field only if you want to test another Olist customer.</p>
+                <details class="switch-profile">
+                    <summary>Use another customer ID</summary>
+                    <label for="customerId">Customer ID</label>
+                    <input id="customerId" type="text" value="06b8999e2fba1a1fbc88172c00ba8bc7">
+                </details>
+                <div class="action-row compact-action">
+                    <button id="recommendBtn">Refresh Recommendations</button>
+                </div>
             </div>
         </section>
 
-        <section id="aiStatus" class="ai-status loading-status">Checking recommendation engine...</section>
+        <section id="aiStatus" class="ai-status loading-status"><strong>Preparing your picks</strong><span>Checking recommendation engine...</span></section>
         <section id="recommendations" class="recommendation-grid"></section>
     </main>
     <script src="{{ url_for('static', filename='js/recommendation.js') }}"></script>
