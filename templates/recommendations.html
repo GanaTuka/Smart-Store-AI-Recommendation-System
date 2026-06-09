@@ -7,18 +7,26 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="nav"><strong>AI Recommendations</strong><a href="/">Dashboard</a><a href="/product-list">Products</a></nav>
-    <main class="page split">
-        <section>
-            <p class="eyebrow">Live Demo</p>
-            <h1>Get product recommendations</h1>
-            <p>Enter an Olist customer ID. The local open-source ML model builds a customer profile from order history and recommends similar products.</p>
-            <div class="action-row">
-                <input id="customerId" type="text" value="06b8999e2fba1a1fbc88172c00ba8bc7">
-                <button id="recommendBtn">Get Recommendations</button>
+    <nav class="nav"><strong>Smart Store AI</strong><a href="/">Home</a><a href="/product-list">Products</a><a href="/admin">Admin</a></nav>
+    <main class="page customer-page">
+        <section class="customer-hero">
+            <div>
+                <p class="eyebrow">Customer Recommendations</p>
+                <h1>Personalized picks powered by local AI.</h1>
+                <p>Enter an Olist customer ID. The system reads purchase history from MySQL, ranks products with a content-based ML model, then explains the result with Ollama or a safe fallback.</p>
+            </div>
+            <div class="customer-panel">
+                <label for="customerId">Customer ID</label>
+                <div class="action-row compact-action">
+                    <input id="customerId" type="text" value="06b8999e2fba1a1fbc88172c00ba8bc7">
+                    <button id="recommendBtn">Find Picks</button>
+                </div>
+                <p class="hint">Try demo customer: <button class="text-button" id="demoCustomer" type="button">06b8999e2fba...</button></p>
             </div>
         </section>
-        <section id="recommendations" class="card-grid"></section>
+
+        <section id="aiStatus" class="ai-status loading-status">Checking recommendation engine...</section>
+        <section id="recommendations" class="recommendation-grid"></section>
     </main>
     <script src="{{ url_for('static', filename='js/recommendation.js') }}"></script>
 </body>
