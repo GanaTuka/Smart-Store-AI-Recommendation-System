@@ -3,28 +3,62 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard | Smart Store AI</title>
+    <title>Smart Store AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="nav">
+    <nav class="nav storefront-nav">
         <strong>Smart Store AI</strong>
+        <a href="/">Home</a>
         <a href="/product-list">Products</a>
-        <a href="/recommendations">Recommendations</a>
+        <a href="/recommendations">AI Picks</a>
         <a href="/admin">Admin</a>
     </nav>
-    <main class="hero">
-        <section>
-            <p class="eyebrow">AI Recommendation System</p>
-            <h1>Turn store data into useful product suggestions.</h1>
-            <p>Simple Flask + MySQL + AI module structure built for a fast hackathon demo.</p>
-            <a class="button" href="/recommendations">Get Recommendations</a>
+
+    <main class="storefront">
+        <section class="store-hero">
+            <div>
+                <p class="eyebrow">AI Powered E-commerce Demo</p>
+                <h1>Shop smarter with personalized product picks.</h1>
+                <p>Browse products from real Olist commerce data, then let the local AI engine recommend items from customer purchase behavior.</p>
+                <div class="hero-actions">
+                    <a class="button" href="/product-list">Explore Products</a>
+                    <a class="ghost-button" href="/recommendations">Try AI Picks</a>
+                </div>
+            </div>
+            <aside class="hero-card">
+                <span>Live data</span>
+                <strong>99k+</strong>
+                <p>Orders analyzed from the Olist dataset using Flask, MySQL, ML similarity, and Ollama explanations.</p>
+            </aside>
         </section>
-        <section class="stats-grid">
-            <article><span>01</span><strong>Products API</strong><p>GET /products</p></article>
-            <article><span>02</span><strong>AI API</strong><p>GET /recommendations/&lt;customer_id&gt;</p></article>
-            <article><span>03</span><strong>Analytics API</strong><p>GET /analytics/top-products</p></article>
+
+        <section class="home-ai-strip">
+            <div class="section-heading">
+                <p class="eyebrow">Personalized Preview</p>
+                <h2>AI picks appear before customers start browsing.</h2>
+                <p>Enter a customer ID to preview recommendations directly on the storefront.</p>
+            </div>
+            <div class="home-ai-controls">
+                <input id="homeCustomerId" type="text" value="06b8999e2fba1a1fbc88172c00ba8bc7">
+                <button id="homeRecommendBtn">Generate Picks</button>
+            </div>
+            <div id="homeAiStatus" class="ai-status loading-status">Ready to generate AI picks.</div>
+            <div id="homeRecommendations" class="store-product-grid"></div>
+        </section>
+
+        <section>
+            <div class="section-heading inline-heading">
+                <div>
+                    <p class="eyebrow">Popular Products</p>
+                    <h2>Top-selling catalog items</h2>
+                </div>
+                <a href="/product-list">View all products</a>
+            </div>
+            <div id="homeProducts" class="store-product-grid"></div>
         </section>
     </main>
+
+    <script src="{{ url_for('static', filename='js/storefront.js') }}"></script>
 </body>
 </html>

@@ -7,24 +7,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="nav"><strong>Products</strong><a href="/">Dashboard</a><a href="/recommendations">Recommendations</a></nav>
-    <main class="page">
-        <h1>Product List</h1>
-        <div id="products" class="card-grid"></div>
+    <nav class="nav"><strong>Smart Store AI</strong><a href="/">Home</a><a href="/recommendations">AI Picks</a><a href="/admin">Admin</a></nav>
+    <main class="page catalog-page">
+        <section class="catalog-hero">
+            <p class="eyebrow">Product Catalog</p>
+            <h1>Browse popular products from real commerce data.</h1>
+            <p>Products are grouped by Olist category, ranked by sales volume, and displayed like a modern storefront.</p>
+        </section>
+        <section class="catalog-toolbar">
+            <input id="productSearch" type="search" placeholder="Search categories like furniture, beauty, electronics...">
+            <span id="productCount">Loading products...</span>
+        </section>
+        <section id="products" class="store-product-grid"></section>
     </main>
-    <script>
-        fetch('/products').then(r => r.json()).then(products => {
-            document.getElementById('products').innerHTML = products.map(product => `
-                <article class="card">
-                    <p class="eyebrow">${product.category}</p>
-                    <h3>${product.product_id.slice(0, 12)}...</h3>
-                    <p>${product.times_sold || 0} sales</p>
-                    <strong>$${Number(product.avg_price || 0).toFixed(2)} avg</strong>
-                </article>
-            `).join('');
-        }).catch(() => {
-            document.getElementById('products').innerHTML = '<p>Could not load products. Check MySQL credentials and imported data.</p>';
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/products.js') }}"></script>
 </body>
 </html>

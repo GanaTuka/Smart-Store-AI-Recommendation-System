@@ -17,3 +17,20 @@ def get_customer_order_counts(limit=10):
         """,
         (limit,),
     )
+
+
+def get_top_customer_states(limit=8):
+    return fetch_all(
+        """
+        SELECT
+            c.customer_state,
+            COUNT(DISTINCT c.customer_id) AS customers,
+            COUNT(o.order_id) AS orders
+        FROM customers c
+        LEFT JOIN orders o ON o.customer_id = c.customer_id
+        GROUP BY c.customer_state
+        ORDER BY orders DESC, customers DESC
+        LIMIT %s
+        """,
+        (limit,),
+    )

@@ -5,13 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin | Smart Store AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <nav class="nav"><strong>Admin Dashboard</strong><a href="/">Dashboard</a><a href="/recommendations">Recommendations</a></nav>
-    <main class="page">
-        <h1>Top Products</h1>
-        <div id="topProducts" class="chart-card"></div>
+    <nav class="nav"><strong>Smart Store Admin</strong><a href="/">Storefront</a><a href="/product-list">Products</a><a href="/recommendations">AI Picks</a></nav>
+    <main class="page admin-page">
+        <section class="admin-hero">
+            <div>
+                <p class="eyebrow">Business Intelligence</p>
+                <h1>Admin analytics dashboard</h1>
+                <p>Monitor revenue, customers, product performance, payments, and reviews from the Olist MySQL database.</p>
+            </div>
+            <div class="admin-health success-status">
+                <strong>Data source active</strong>
+                <span>Flask analytics APIs connected to MySQL</span>
+            </div>
+        </section>
+
+        <section id="summaryCards" class="kpi-grid"></section>
+
+        <section class="dashboard-grid">
+            <article class="dashboard-card large-card">
+                <div class="chart-heading"><h2>Revenue by Category</h2><span>Top categories</span></div>
+                <canvas id="categoryChart"></canvas>
+            </article>
+            <article class="dashboard-card">
+                <div class="chart-heading"><h2>Payment Split</h2><span>By payment type</span></div>
+                <canvas id="paymentChart"></canvas>
+            </article>
+            <article class="dashboard-card">
+                <div class="chart-heading"><h2>Review Scores</h2><span>Customer feedback</span></div>
+                <canvas id="reviewChart"></canvas>
+            </article>
+            <article class="dashboard-card large-card">
+                <div class="chart-heading"><h2>Top Products</h2><span>Units sold</span></div>
+                <div id="topProducts" class="leaderboard"></div>
+            </article>
+            <article class="dashboard-card">
+                <div class="chart-heading"><h2>Customer States</h2><span>Order concentration</span></div>
+                <div id="stateList" class="leaderboard"></div>
+            </article>
+        </section>
     </main>
-    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin-dashboard.js') }}"></script>
 </body>
 </html>
