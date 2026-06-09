@@ -17,6 +17,23 @@ function shortProductId(productId) {
     return `${productId.slice(0, 10)}...${productId.slice(-4)}`;
 }
 
+function productVisual(category) {
+    const label = category
+        .split('_')
+        .filter(Boolean)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+        .slice(0, 2);
+    return `
+        <div class="product-visual mini-visual" aria-label="${category.replaceAll('_', ' ')} product image">
+            <span class="blob blob-main"></span>
+            <span class="blob blob-side"></span>
+            <span class="blob blob-leaf"></span>
+            <em>${label}</em>
+        </div>
+    `;
+}
+
 function setStatus(products) {
     if (!products.length) {
         statusBox.className = 'ai-status error-status';
@@ -90,6 +107,7 @@ async function loadRecommendations() {
                     <span class="rank-badge">#${index + 1}</span>
                     <span class="model-badge">${badge}</span>
                 </div>
+                ${productVisual(product.category)}
                 <p class="eyebrow">${product.category.replaceAll('_', ' ')}</p>
                 <h3>${title}</h3>
                 <p class="product-id">Catalog reference: ${shortProductId(product.product_id)}</p>
